@@ -4,10 +4,14 @@
 <meta charset="UTF-8">
 <title>Radio Player</title>
 
+<!-- ============================================================
+     FULL PLAYER CSS WITH MODERN, CHRISTMAS & RETRO THEMES
+     ============================================================ -->
 <style>
-/* =========================================
-   BASE THEME VARIABLES (STANDARD LIGHT)
-   ========================================= */
+
+/* ============================================================
+   BASE THEME VARIABLES (MODERN THEME DEFAULTS)
+   ============================================================ */
 :root {
   --bg: #f6f4ee;
   --text: #000;
@@ -15,9 +19,9 @@
   --powered: #0073e6;
 }
 
-/* =========================================
+/* ============================================================
    MODE: DARK
-   ========================================= */
+   ============================================================ */
 .mode-dark {
   --bg: #000;
   --text: #fff;
@@ -25,16 +29,18 @@
   --powered: #4da3ff;
 }
 
-/* =========================================
-   THEME: STANDARD
-   ========================================= */
-.theme-standard {
-  /* uses default variables */
+/* ============================================================
+   THEME: MODERN (unchanged from your Standard theme)
+   ============================================================ */
+.theme-modern {
+  /* Uses default variables */
 }
 
-/* =========================================
+/* ============================================================
    THEME: CHRISTMAS
-   ========================================= */
+   - Twinkling lights
+   - Snowfall behind player only
+   ============================================================ */
 .theme-christmas {
   --bg: #fff8f0;
   --text: #8b0000;
@@ -72,9 +78,58 @@
   to { opacity: 1; }
 }
 
-/* =========================================
+/* Snowfall container (behind player only) */
+.snowfall {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  display: none;
+}
+
+.theme-christmas .snowfall {
+  display: block;
+}
+
+/* Snowfall layers */
+.snowfall::before,
+.snowfall::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background-image:
+    radial-gradient(white 2px, transparent 2px),
+    radial-gradient(white 3px, transparent 3px),
+    radial-gradient(white 1.5px, transparent 1.5px);
+  background-size: 8px 8px, 12px 12px, 6px 6px;
+  background-position: 0 0, 50px 50px, 100px 100px;
+  opacity: 0.45;
+  animation: snowfall 18s linear infinite;
+}
+
+.snowfall::after {
+  opacity: 0.3;
+  animation-duration: 28s;
+  animation-direction: reverse;
+}
+
+@keyframes snowfall {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(40%); }
+}
+
+/* ============================================================
    THEME: RETRO
-   ========================================= */
+   - Woodgrain TV frame
+   - Inner bezel
+   - Scanlines
+   - Tuning bar
+   ============================================================ */
 .theme-retro {
   --bg: #c49a6c;
   --text: #2b1b0f;
@@ -82,6 +137,7 @@
   --powered: #5a3c24;
 }
 
+/* Woodgrain frame */
 .theme-retro .radio-wrapper {
   border-radius: 18px;
   border: 4px solid var(--border);
@@ -89,13 +145,49 @@
   box-shadow:
     inset 0 0 10px rgba(0,0,0,0.35),
     0 4px 18px rgba(0,0,0,0.45);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Retro speaker grille effect */
+/* Inner bezel */
+.theme-retro .radio-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Scanline overlay */
+.theme-retro .radio-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    transparent 2px
+  );
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Retro speaker grille behind logo */
 .theme-retro .logo-container {
   border-radius: 6px;
   overflow: hidden;
   box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+  background: repeating-linear-gradient(
+    45deg,
+    #5a3c24,
+    #5a3c24 4px,
+    #4a2f1c 4px,
+    #4a2f1c 8px
+  );
 }
 
 /* Retro play button */
@@ -111,16 +203,37 @@
   background: #fff !important;
 }
 
-/* =========================================
+/* Retro tuning bar */
+.theme-retro .tuning-bar {
+  width: 100%;
+  height: 6px;
+  background: #5a3c24;
+  border-radius: 3px;
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-retro .tuning-indicator {
+  position: absolute;
+  top: -2px;
+  left: 40%;
+  width: 4px;
+  height: 10px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+/* ============================================================
    ALIGNMENT OPTIONS
-   ========================================= */
+   ============================================================ */
 .align-left { justify-content: flex-start; }
 .align-center { justify-content: center; }
 .align-right { justify-content: flex-end; }
 
-/* =========================================
-   BASE STYLES
-   ========================================= */
+/* ============================================================
+   BASE PLAYER STYLES
+   ============================================================ */
 body {
   margin: 0;
   padding: 20px;
@@ -129,14 +242,14 @@ body {
   color: var(--text);
 }
 
-/* PLAYER ALIGNMENT WRAPPER */
+/* Player alignment wrapper */
 .player-center {
   display: flex;
   width: 100%;
   margin: 0 auto;
 }
 
-/* WRAPPER */
+/* Main wrapper */
 .radio-wrapper {
   display: flex;
   align-items: center;
@@ -149,9 +262,16 @@ body {
   box-shadow: 0 0 14px rgba(0,0,0,0.12);
   border: 2px solid var(--border);
   box-sizing: border-box;
+  position: relative;
 }
 
-/* LEFT SIDE */
+/* Snowfall sits behind content */
+.radio-wrapper > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* Left side */
 .logo-container {
   position: relative;
   width: 120px;
@@ -167,7 +287,7 @@ body {
   object-fit: cover;
 }
 
-/* PLAY/STOP BUTTON */
+/* Play/Stop button */
 .play-btn {
   position: absolute;
   top: 50%;
@@ -209,7 +329,7 @@ body {
   transform: translate(-50%, -50%);
 }
 
-/* RIGHT SIDE */
+/* Right side */
 .radio-right {
   display: flex;
   flex-direction: column;
@@ -224,12 +344,13 @@ body {
   color: var(--text);
 }
 
+/* Volume slider */
 #volumeSlider {
   width: 100%;
   max-width: 220px;
 }
 
-/* POWERED BY */
+/* Powered by */
 .powered-by {
   margin-top: 8px;
   font-size: 14px;
@@ -244,7 +365,7 @@ body {
   text-decoration: underline;
 }
 
-/* MOBILE */
+/* Mobile */
 @media (max-width: 480px) {
   .radio-wrapper {
     flex-direction: column;
@@ -266,18 +387,32 @@ body {
     max-width: 260px;
   }
 }
+
 </style>
 </head>
-
 <body>
 
-<!-- Christmas lights (only visible in christmas theme) -->
+<!-- ============================================================
+     CHRISTMAS LIGHTS (only visible in Christmas theme)
+     ============================================================ -->
 <div class="christmas-lights">
   <span></span><span></span><span></span><span></span><span></span>
 </div>
 
+<!-- ============================================================
+     PLAYER ALIGNMENT WRAPPER
+     ============================================================ -->
 <div id="playerAlign" class="player-center">
+
+  <!-- ============================================================
+       MAIN PLAYER WRAPPER
+       ============================================================ -->
   <div class="radio-wrapper">
+
+    <!-- Snowfall behind player (Christmas theme only) -->
+    <div class="snowfall"></div>
+
+    <!-- LEFT SIDE -->
     <div class="radio-left">
       <div class="logo-container">
         <img id="logo" class="station-logo" src="" alt="Station Logo">
@@ -285,8 +420,15 @@ body {
       </div>
     </div>
 
+    <!-- RIGHT SIDE -->
     <div class="radio-right">
       <div id="stationName" class="station-name"></div>
+
+      <!-- Retro tuning bar (visible only in Retro theme) -->
+      <div class="tuning-bar">
+        <div class="tuning-indicator"></div>
+      </div>
+
       <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider">
 
       <div class="powered-by">
@@ -294,12 +436,17 @@ body {
       </div>
     </div>
 
+    <!-- AUDIO ELEMENT -->
     <audio id="audioPlayer">
       <source id="streamSource" src="" type="audio/mpeg">
     </audio>
+
   </div>
 </div>
 
+<!-- ============================================================
+     JAVASCRIPT LOGIC
+     ============================================================ -->
 <script>
 // Read URL parameters
 const params = new URLSearchParams(window.location.search);
@@ -309,7 +456,7 @@ const logo = params.get("logo") || "https://via.placeholder.com/300";
 const stream = params.get("stream") || "";
 
 // NEW PARAMETERS
-const themeStyle = params.get("themeStyle") || "standard"; // standard | christmas | retro
+const themeStyle = params.get("themeStyle") || "modern"; // modern | christmas | retro
 const mode = params.get("mode") || "light"; // light | dark
 const align = params.get("align") || "center";
 
@@ -332,6 +479,7 @@ const audio = document.getElementById("audioPlayer");
 const playButton = document.getElementById("playButton");
 const volumeSlider = document.getElementById("volumeSlider");
 
+// Play / Pause toggle
 function togglePlay() {
   if (audio.paused) {
     audio.play();
@@ -342,6 +490,7 @@ function togglePlay() {
   }
 }
 
+// Volume control
 volumeSlider.addEventListener("input", function() {
   audio.volume = this.value;
 });
@@ -349,4 +498,3 @@ volumeSlider.addEventListener("input", function() {
 
 </body>
 </html>
-
