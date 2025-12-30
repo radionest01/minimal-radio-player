@@ -6,7 +6,7 @@
 
 <style>
 /* =========================================
-   THEME VARIABLES
+   BASE THEME VARIABLES (STANDARD LIGHT)
    ========================================= */
 :root {
   --bg: #f6f4ee;
@@ -15,8 +15,10 @@
   --powered: #0073e6;
 }
 
-/* DARK THEME */
-.theme-dark {
+/* =========================================
+   MODE: DARK
+   ========================================= */
+.mode-dark {
   --bg: #000;
   --text: #fff;
   --border: #333;
@@ -24,19 +26,97 @@
 }
 
 /* =========================================
+   THEME: STANDARD
+   ========================================= */
+.theme-standard {
+  /* uses default variables */
+}
+
+/* =========================================
+   THEME: CHRISTMAS
+   ========================================= */
+.theme-christmas {
+  --bg: #fff8f0;
+  --text: #8b0000;
+  --border: #b30000;
+  --powered: #d40000;
+}
+
+/* Christmas lights bar */
+.christmas-lights {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+.theme-christmas .christmas-lights {
+  display: flex;
+}
+
+.christmas-lights span {
+  width: 10px;
+  height: 16px;
+  border-radius: 50%;
+  animation: blink 1.5s infinite alternate;
+}
+
+.christmas-lights span:nth-child(1) { background: red; box-shadow: 0 0 6px red; }
+.christmas-lights span:nth-child(2) { background: green; box-shadow: 0 0 6px green; animation-delay: .3s; }
+.christmas-lights span:nth-child(3) { background: gold; box-shadow: 0 0 6px gold; animation-delay: .6s; }
+.christmas-lights span:nth-child(4) { background: blue; box-shadow: 0 0 6px blue; animation-delay: .9s; }
+.christmas-lights span:nth-child(5) { background: purple; box-shadow: 0 0 6px purple; animation-delay: 1.2s; }
+
+@keyframes blink {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* =========================================
+   THEME: RETRO
+   ========================================= */
+.theme-retro {
+  --bg: #c49a6c;
+  --text: #2b1b0f;
+  --border: #8b5e34;
+  --powered: #5a3c24;
+}
+
+.theme-retro .radio-wrapper {
+  border-radius: 18px;
+  border: 4px solid var(--border);
+  background: var(--bg);
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.35),
+    0 4px 18px rgba(0,0,0,0.45);
+}
+
+/* Retro speaker grille effect */
+.theme-retro .logo-container {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+}
+
+/* Retro play button */
+.theme-retro .play-btn {
+  background: #8b5e34 !important;
+}
+
+.theme-retro .play-btn::before {
+  border-left-color: #fff !important;
+}
+
+.theme-retro .playing::before {
+  background: #fff !important;
+}
+
+/* =========================================
    ALIGNMENT OPTIONS
    ========================================= */
-.align-left {
-  justify-content: flex-start;
-}
-
-.align-center {
-  justify-content: center;
-}
-
-.align-right {
-  justify-content: flex-end;
-}
+.align-left { justify-content: flex-start; }
+.align-center { justify-content: center; }
+.align-right { justify-content: flex-end; }
 
 /* =========================================
    BASE STYLES
@@ -102,7 +182,7 @@ body {
   padding: 0;
 }
 
-/* ▶ Play icon (centered triangle) */
+/* ▶ Play icon */
 .play-btn::before {
   content: "";
   position: absolute;
@@ -116,7 +196,7 @@ body {
   border-bottom: 8px solid transparent;
 }
 
-/* ■ Stop icon (centered + smaller) */
+/* ■ Stop icon */
 .playing::before {
   content: "";
   position: absolute;
@@ -191,6 +271,11 @@ body {
 
 <body>
 
+<!-- Christmas lights (only visible in christmas theme) -->
+<div class="christmas-lights">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
 <div id="playerAlign" class="player-center">
   <div class="radio-wrapper">
     <div class="radio-left">
@@ -222,24 +307,21 @@ const params = new URLSearchParams(window.location.search);
 const name = params.get("name") || "Your Station";
 const logo = params.get("logo") || "https://via.placeholder.com/300";
 const stream = params.get("stream") || "";
-const theme = params.get("theme") || "light";
+
+// NEW PARAMETERS
+const themeStyle = params.get("themeStyle") || "standard"; // standard | christmas | retro
+const mode = params.get("mode") || "light"; // light | dark
 const align = params.get("align") || "center";
 
-// Apply theme
-if (theme === "dark") {
-  document.body.classList.add("theme-dark");
-}
+// Apply theme style
+document.body.classList.add(`theme-${themeStyle}`);
+
+// Apply mode
+document.body.classList.add(`mode-${mode}`);
 
 // Apply alignment
 const alignContainer = document.getElementById("playerAlign");
-
-if (align === "left") {
-  alignContainer.classList.add("align-left");
-} else if (align === "right") {
-  alignContainer.classList.add("align-right");
-} else {
-  alignContainer.classList.add("align-center");
-}
+alignContainer.classList.add(`align-${align}`);
 
 // Apply station info
 document.getElementById("stationName").textContent = name;
@@ -267,5 +349,4 @@ volumeSlider.addEventListener("input", function() {
 
 </body>
 </html>
-
 
