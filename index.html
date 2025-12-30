@@ -5,11 +5,33 @@
 <title>Radio Player</title>
 
 <style>
+/* =========================================
+   THEME VARIABLES
+   ========================================= */
+:root {
+  --bg: #f6f4ee;
+  --text: #000;
+  --border: #000;
+  --powered: #0073e6;
+}
+
+/* DARK THEME (pure black) */
+.theme-dark {
+  --bg: #000;
+  --text: #fff;
+  --border: #333;
+  --powered: #4da3ff;
+}
+
+/* =========================================
+   BASE STYLES
+   ========================================= */
 body {
   margin: 0;
   padding: 20px;
   background: transparent;
   font-family: Arial, sans-serif;
+  color: var(--text);
 }
 
 /* CENTER THE PLAYER */
@@ -20,18 +42,18 @@ body {
   margin: 0 auto;
 }
 
-/* WRAPPER — responsive + border */
+/* WRAPPER */
 .radio-wrapper {
   display: flex;
   align-items: center;
   gap: 24px;
-  background: #f6f4ee;
+  background: var(--bg);
   padding: 18px;
   border-radius: 14px;
   width: 100%;
   max-width: 520px;
   box-shadow: 0 0 14px rgba(0,0,0,0.12);
-  border: 2px solid black;
+  border: 2px solid var(--border);
   box-sizing: border-box;
 }
 
@@ -66,6 +88,7 @@ body {
   padding: 0;
 }
 
+/* ▶ Triangle (default) */
 .play-btn::before {
   content: "";
   position: absolute;
@@ -78,11 +101,12 @@ body {
   border-bottom: 8px solid transparent;
 }
 
+/* ■ STOP icon (black square) */
 .playing::before {
   content: "";
   position: absolute;
-  left: 13px;
-  top: 13px;
+  left: 12px;
+  top: 12px;
   width: 14px;
   height: 14px;
   background: black;
@@ -100,6 +124,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
+  color: var(--text);
 }
 
 #volumeSlider {
@@ -107,14 +132,14 @@ body {
   max-width: 220px;
 }
 
-/* POWERED BY LINE */
+/* POWERED BY */
 .powered-by {
   margin-top: 8px;
   font-size: 14px;
 }
 
 .powered-by a {
-  color: #0073e6;
+  color: var(--powered);
   text-decoration: none;
 }
 
@@ -180,8 +205,14 @@ const params = new URLSearchParams(window.location.search);
 const name = params.get("name") || "Your Station";
 const logo = params.get("logo") || "https://via.placeholder.com/300";
 const stream = params.get("stream") || "";
+const theme = params.get("theme") || "light";
 
-// Apply values
+// Apply theme
+if (theme === "dark") {
+  document.body.classList.add("theme-dark");
+}
+
+// Apply station info
 document.getElementById("stationName").textContent = name;
 document.getElementById("logo").src = logo;
 document.getElementById("streamSource").src = stream;
