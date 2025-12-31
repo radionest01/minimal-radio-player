@@ -344,10 +344,72 @@ body {
   color: var(--text);
 }
 
-/* Volume slider */
+/* Volume slider cross-browser compatible */
 #volumeSlider {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   width: 100%;
   max-width: 220px;
+  height: 6px;
+  background: #ccc;
+  border-radius: 3px;
+  outline: none;
+  margin-top: 6px;
+}
+
+/* WebKit */
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #0073e6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #000;
+  margin-top: -5px;
+  transition: background 0.3s;
+}
+#volumeSlider::-webkit-slider-thumb:hover {
+  background: #005bb5;
+}
+#volumeSlider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: #ccc;
+}
+
+/* Firefox */
+#volumeSlider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #0073e6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #000;
+  transition: background 0.3s;
+}
+#volumeSlider::-moz-range-thumb:hover {
+  background: #005bb5;
+}
+
+/* IE / Edge */
+#volumeSlider::-ms-thumb {
+  width: 16px;
+  height: 16px;
+  background: #0073e6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #000;
+  transition: background 0.3s;
+}
+#volumeSlider::-ms-track {
+  width: 100%;
+  height: 6px;
+  background: #ccc;
+  border-radius: 3px;
+  border-color: transparent;
+  color: transparent;
 }
 
 /* Powered by */
