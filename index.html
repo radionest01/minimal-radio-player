@@ -16,7 +16,6 @@
   --bg: #f6f4ee;
   --text: #000;
   --border: #000;
-  --powered: #0073e6;
 }
 
 /* ============================================================
@@ -26,7 +25,6 @@
   --bg: #000;
   --text: #fff;
   --border: #333;
-  --powered: #4da3ff;
 }
 
 /* ============================================================
@@ -43,7 +41,6 @@
   --bg: #fff8f0;
   --text: #8b0000;
   --border: #b30000;
-  --powered: #d40000;
 }
 
 /* ============================================================
@@ -136,7 +133,100 @@
   --bg: #c49a6c;
   --text: #2b1b0f;
   --border: #8b5e34;
-  --powered: #5a3c24;
+}
+
+/* Woodgrain frame */
+.theme-retro .radio-wrapper {
+  border-radius: 18px;
+  border: 4px solid var(--border);
+  background: var(--bg);
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.35),
+    0 4px 18px rgba(0,0,0,0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner bezel */
+.theme-retro .radio-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Scanline overlay */
+.theme-retro .radio-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 1px,
+    transparent 2px
+  );
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Retro speaker grille behind logo */
+.theme-retro .logo-container {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+  background: repeating-linear-gradient(
+    45deg,
+    #5a3c24,
+    #5a3c24 4px,
+    #4a2f1c 4px,
+    #4a2f1c 8px
+  );
+}
+
+/* Retro play button */
+.theme-retro .play-btn {
+  background: #8b5e34 !important;
+}
+
+.theme-retro .play-btn::before {
+  border-left-color: #fff !important;
+}
+
+.theme-retro .playing::before {
+  background: #fff !important;
+}
+
+/* Retro tuning bar with automatic animation */
+.theme-retro .tuning-bar {
+  width: 100%;
+  height: 6px;
+  background: #5a3c24;
+  border-radius: 3px;
+  margin-top: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-retro .tuning-indicator {
+  position: absolute;
+  top: -2px;
+  left: 0%;
+  width: 4px;
+  height: 10px;
+  background: #fff;
+  border-radius: 2px;
+  animation: tuningMove 3s ease-in-out infinite alternate;
+}
+
+@keyframes tuningMove {
+  0% { left: 0%; }
+  50% { left: 50%; }
+  100% { left: 100%; }
 }
 
 /* ============================================================
@@ -259,80 +349,21 @@ body {
   color: var(--text);
 }
 
-/* Volume slider cross-browser compatible */
+/* Volume slider */
 #volumeSlider {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   width: 100%;
   max-width: 220px;
-  height: 6px;
-  background: #ccc;
-  border-radius: 3px;
-  outline: none;
   margin-top: 6px;
 }
 
-/* WebKit */
-#volumeSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  background: #0073e6;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid #000;
-  margin-top: -5px;
-  transition: background 0.3s;
-}
-#volumeSlider::-webkit-slider-thumb:hover {
-  background: #005bb5;
-}
-
-/* Firefox */
-#volumeSlider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  background: #0073e6;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid #000;
-  transition: background 0.3s;
-}
-
-/* IE / Edge */
-#volumeSlider::-ms-thumb {
-  width: 16px;
-  height: 16px;
-  background: #0073e6;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid #000;
-  transition: background 0.3s;
-}
-#volumeSlider::-ms-track {
-  width: 100%;
-  height: 6px;
-  background: #ccc;
-  border-radius: 3px;
-  border-color: transparent;
-  color: transparent;
-}
-
-/* Powered by */
+/* ============================================================
+   POWERED BY — LOCKED BRAND STYLE
+   ============================================================ */
 .powered-by {
   margin-top: 8px;
   font-size: 14px;
 }
 
-.powered-by a {
-  color: var(--powered);
-  text-decoration: none;
-}
-
-/* ============================================================
-   FINAL OVERRIDE — FULL LINE ALWAYS BLUE & UNDERLINED
-   ============================================================ */
 .powered-by a,
 .powered-by a:visited,
 .powered-by a:hover,
@@ -341,9 +372,31 @@ body {
   text-decoration: underline !important;
 }
 
+/* Mobile */
+@media (max-width: 480px) {
+  .radio-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .logo-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .station-name {
+    font-size: 20px;
+  }
+
+  #volumeSlider {
+    max-width: 260px;
+  }
+}
+
 </style>
 </head>
-
 <body>
 
 <div class="christmas-lights">
@@ -351,9 +404,7 @@ body {
 </div>
 
 <div id="playerAlign" class="player-center">
-
   <div class="radio-wrapper">
-
     <div class="snowfall"></div>
 
     <div class="radio-left">
@@ -387,7 +438,6 @@ body {
 </div>
 
 <script>
-// Read URL parameters
 const params = new URLSearchParams(window.location.search);
 
 const name = params.get("name") || "Your Station";
@@ -398,26 +448,17 @@ const themeStyle = params.get("themeStyle") || "modern";
 const mode = params.get("mode") || "light";
 const align = params.get("align") || "center";
 
-// Apply theme style
 document.body.classList.add(`theme-${themeStyle}`);
-
-// Apply mode
 document.body.classList.add(`mode-${mode}`);
+document.getElementById("playerAlign").classList.add(`align-${align}`);
 
-// Apply alignment
-const alignContainer = document.getElementById("playerAlign");
-alignContainer.classList.add(`align-${align}`);
+stationName.textContent = name;
+logo && (document.getElementById("logo").src = logo);
+stream && (streamSource.src = stream);
 
-// Apply station info
-document.getElementById("stationName").textContent = name;
-document.getElementById("logo").src = logo;
-document.getElementById("streamSource").src = stream;
-
-const audio = document.getElementById("audioPlayer");
+const audio = audioPlayer;
 const playButton = document.getElementById("playButton");
-const volumeSlider = document.getElementById("volumeSlider");
 
-// Play / Pause toggle
 function togglePlay() {
   if (audio.paused) {
     audio.play();
@@ -428,9 +469,8 @@ function togglePlay() {
   }
 }
 
-// Volume control
-volumeSlider.addEventListener("input", function() {
-  audio.volume = this.value;
+volumeSlider.addEventListener("input", e => {
+  audio.volume = e.target.value;
 });
 </script>
 
